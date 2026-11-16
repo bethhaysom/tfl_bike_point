@@ -65,7 +65,7 @@ while attempt <= max_attempts:
             logging.warning(f'Max number of attempts reached. Status code {status_code}. Investigate further pls.')
         else:
             print(f'Attempt {attempt} failed, status code {status_code}. Trying again...')
-            logger.error(f'Attempt {attempt} failed, status code {status_code}. Trying again...')
+            logger.error
         
         attempt += 1
         time.sleep(30) # this makes it wait for 30 seconds before rerunning
