@@ -1,8 +1,27 @@
 import os
 import json
 import logging
+from datetime import datetime
 from dotenv import load_dotenv
 import boto3
+
+timestamp = datetime.now().strftime('%Y-%m-%d %H-%M-%S') # capturing time for file name
+
+# setting up files for logging
+log_dir = 'logs'
+os.makedirs(log_dir,exist_ok=True)
+log_filename = f'{log_dir}/{timestamp}.log' # .log is a filetype specifically for logs (similar to .txt)
+
+# configuration of log file
+logging.basicConfig(
+    filename = log_filename,
+    format='%(asctime)s - %(levelname)s - %(message)s',
+    level=logging.INFO # ignore anything below INFO
+)
+
+logger = logging.getLogger() # at this point the log is set up but won't create files. need to add these bits in
+logger.info('Logger was succesfully initialiser.')
+
 
 # Connecting to .env to pull through AWS keys
 load_dotenv()
@@ -40,5 +59,8 @@ for file in file_location:
         s3_client.upload_file(to_upload, AWS_BUCKET_NAME, file) # uploading each file
         os.remove(to_upload)
         print(f'File {file} successfully uploaded!')
+        logger.info(f'file {file} successfully uploaded!')
     except Exception as e:
         print(f'Something went wrong... Error: {e}')
+        logger.error(f'something went wrong... error: {e}')
+
