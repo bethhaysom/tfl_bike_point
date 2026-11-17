@@ -13,7 +13,7 @@ log_filename = f'{log_dir}/extract_{timestamp}.log'
 # configuration of log file
 logging.basicConfig(
     filename = log_filename,
-    format='%(asctime)s - %(levelname)s - %(message)s',
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
     level=logging.INFO # ignore anything below INFO
 )
 
