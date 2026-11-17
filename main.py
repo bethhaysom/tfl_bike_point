@@ -1,4 +1,5 @@
 import os
+import logging
 from datetime import datetime
 from modules.extract_function import extract_to_json
 from modules.load_function import load_to_s3
@@ -11,6 +12,9 @@ timestamp = datetime.now().strftime('%Y-%m-%d %H-%M-%S') # capturing time for fi
 log_dir = 'logs'
 
 logging_config(log_dir, timestamp)
+
+logger = logging.getLogger() # at this point the log is set up but won't create files. need to add these bits in
+logger.info('Logger was succesfully initialised.')
 
 # configure params for function
 url = 'https://api.tfl.gov.uk/BikePoint/'

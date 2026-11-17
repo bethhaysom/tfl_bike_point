@@ -21,6 +21,3 @@ def logging_config(log_dir: str, timestamp: str):
         format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
         level=logging.INFO # ignore anything below INFO
     )
-
-    logger = logging.getLogger() # at this point the log is set up but won't create files. need to add these bits in
-    logger.info('Logger was succesfully initialised.')
