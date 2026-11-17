@@ -70,4 +70,3 @@ while attempt <= max_attempts:
         attempt += 1
         time.sleep(30) # this makes it wait for 30 seconds before rerunning
 
-
