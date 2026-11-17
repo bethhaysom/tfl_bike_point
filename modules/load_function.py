@@ -15,6 +15,7 @@ def load_to_s3(data_dir: str, AWS_ACCESS_KEY: str, AWS_SECRET_ACCESS_KEY: str, A
         AWS_BUCKET_NAME (str): S3 bucket name (get value from .env)
     """
 
+    # list files in data_dir folder
     file_location = os.listdir(data_dir)
 
     # Configuring s3 credentials

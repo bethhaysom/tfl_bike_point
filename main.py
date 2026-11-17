@@ -1,25 +1,16 @@
+import os
 from datetime import datetime
 from modules.extract_function import extract_to_json
-import logging
-import os
+from modules.load_function import load_to_s3
+from modules.logging_function import logging_config
+from dotenv import load_dotenv
 
 timestamp = datetime.now().strftime('%Y-%m-%d %H-%M-%S') # capturing time for file name
 
 # setting up files for logging
 log_dir = 'logs'
-os.makedirs(log_dir,exist_ok=True)
-log_filename = f'{log_dir}/extract_{timestamp}.log' 
 
-# configuration of log file
-logging.basicConfig(
-    filename = log_filename,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-    level=logging.INFO # ignore anything below INFO
-)
-
-logger = logging.getLogger() # at this point the log is set up but won't create files. need to add these bits in
-logger.info('Logger was succesfully initialiser.')
-
+logging_config(log_dir, timestamp)
 
 # configure params for function
 url = 'https://api.tfl.gov.uk/BikePoint/'
@@ -27,4 +18,17 @@ data_dir = 'data'
 
 extract_result = extract_to_json(url, data_dir, timestamp, max_attempts=3, delay=30)
 
-print(extract_result)
+if extract_result:
+    # Connecting to .env to pull through AWS keys
+    load_dotenv()
+
+    # Get keys
+    AWS_ACCESS_KEY = os.getenv('AWS_ACCESS_KEY')
+    AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY')
+    AWS_BUCKET_NAME = os.getenv('AWS_BUCKET_NAME')
+
+    # run load to s3
+    load_result = load_to_s3(data_dir, AWS_ACCESS_KEY, AWS_SECRET_ACCESS_KEY, AWS_BUCKET_NAME)
+
+else: 
+    logger.info('Extract saved no data, nothing to attempt to upload so aborted.')
