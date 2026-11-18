@@ -1,0 +1,29 @@
+name: Bike Point Ingestion
+
+on: 
+  schedule:
+    - cron: '*/5 * * * *'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    environment: Bike Point DES9
+    steps:
+      - name: Checkout the repo
+        uses: actions/checkout@v7
+
+      - name: Setup python
+        uses: actions/setup-python@v7
+        with:
+          python-version: 3.12
+
+      - name: Install packages
+        run: pip install -r requirements.txt
+
+      - name: Run script
+        env:
+          AWS_ACCESS_KEY: ${{secrets.AWS_ACCESS_KEY}}
+          AWS_SECRET_ACCESS_KEY: ${{secrets.AWS_SECRET_ACCESS_KEY}}
+          AWS_BUCKET_NAME: ${{secrets.AWS_BUCKET_NAME}}
+        run: python main.py
